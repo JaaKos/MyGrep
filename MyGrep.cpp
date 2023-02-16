@@ -6,7 +6,7 @@
 void noArgs(std::string& source, std::string& search);
 int searchString(std::string source, std::string search, const bool& ignoreCase);
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     std::string source;
     std::string search;
@@ -30,27 +30,30 @@ int main(int argc, char* argv[])
         }
         search = argv[argc-2];
         std::ifstream File;
-        File.open(argv[argc-1]);
-        if (!File.is_open()) 
+        bool failState = false;
+        try
         {
-        std::cerr << "Error: File not found";
-        return 1;
+            File.open(argv[argc-1]);
+            if (File.is_open());
+            else throw 100;
+        }
+        catch (...) 
+        {
+            perror("Error");
+            return 1;
         } 
         std::vector<int> lineCounts;
         std::vector<std::string> matchingLines;
         int lineCount = 0;
-        while (true)
+        while (std::getline(File, source))
         {
             lineCount++;
-            std::getline(File, source);
-            int value;
-            value = searchString(source, search, ignoreCase);
+            int value = searchString(source, search, ignoreCase);
             if ((!reverseSearchResults && value != -1) || (reverseSearchResults && value == -1)) 
             {
                 lineCounts.push_back(lineCount);
                 matchingLines.push_back(source);
             }
-            if (File.eof()) break;
         }
         File.close();
         if (!matchingLines.empty())
