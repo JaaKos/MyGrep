@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
         }
         search = argv[argc-2];
         std::ifstream File;
-        bool failState = false;
         try
         {
             File.open(argv[argc-1]);
